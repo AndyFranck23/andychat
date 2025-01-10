@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { NOM_DE_DOMAIN } from '../App'
 
 export const SignUp = () => {
     const navigate = useNavigate()
@@ -21,7 +22,7 @@ export const SignUp = () => {
         if ((form.identite && form.role && form.email && form.password && form.tryPassword) !== '') {
             if (form.password == form.tryPassword) {
                 try {
-                    const response = await axios.post('http://localhost:5000/signUp', { form })
+                    const response = await axios.post(`${NOM_DE_DOMAIN}/signUp`, { form })
                     setMessage(response.data.message)
                     console.log(response.data)
                     navigate('/login')

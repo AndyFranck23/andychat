@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { MyInput } from './SignUp'
 import axios from 'axios'
+import { NOM_DE_DOMAIN } from '../App'
 
 export const Login = () => {
     const [message, setMessage] = useState('')
@@ -24,7 +25,7 @@ export const Login = () => {
     const submit = async () => {
         if ((form.email && form.password) !== '') {
             try {
-                let response = await axios.post("http://localhost:5000/login", { form }, { withCredentials: true }) // Inclure les cookies
+                let response = await axios.post(`${NOM_DE_DOMAIN}/login`, { form }, { withCredentials: true }) // Inclure les cookies
                 const { user } = response.data
                 if (user.autorisation === 1) {
                     localStorage.setItem('userData', JSON.stringify(user)); // Sauvegarder l'utilisateur

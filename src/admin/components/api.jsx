@@ -1,4 +1,6 @@
 import axios from "axios"
+const NOM_DE_DOMAIN = import.meta.env.VITE_API_URL
+
 
 export const listType = async (setTypes) => {
     try {

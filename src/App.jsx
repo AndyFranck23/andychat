@@ -9,7 +9,7 @@ import ProtectedRoute from './admin/components/ProtectedRoute'
 import axios from 'axios'
 
 
-export const NOM_DE_DOMAIN = 'http://localhost:' + 5000
+export const NOM_DE_DOMAIN = import.meta.env.VITE_API_URL
 
 function App() {
   const [loading, setLoading] = useState(true)

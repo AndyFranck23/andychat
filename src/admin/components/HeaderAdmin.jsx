@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { MenuAdmin } from './MenuAdmin'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { NOM_DE_DOMAIN } from '../../App'
 
 export const HeaderAdmin = ({ userdata }) => {
     const navigate = useNavigate()
@@ -13,7 +14,7 @@ export const HeaderAdmin = ({ userdata }) => {
 
     const logout = async () => {
         try {
-            await axios.post('http://localhost:5000/logout', {}, { withCredentials: true });
+            await axios.post(`${NOM_DE_DOMAIN}/logout`, {}, { withCredentials: true });
             console.log('Déconnecté');
             navigate('/login');
         } catch (error) {
