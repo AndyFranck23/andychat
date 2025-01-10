@@ -4,7 +4,7 @@ import Content from '../components/Content'
 import { CategorieOD } from './CategorieOD'
 import { Header } from '../components/Header'
 import { Menu } from '../components/Menu'
-import { Footer } from '../components/footer'
+import { Footer } from '../components/Footer'
 
 export const Home = ({ classement, data, blog, types }) => {
     const [dataCat, setDataCat] = useState([])
