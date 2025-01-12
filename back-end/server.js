@@ -18,9 +18,8 @@ const NOM_DE_DOMAIN = process.env.VITE_API_URL
 
 app.use(express.json())
 app.use(cors({
-    origin: "http://localhost:5173/", // Domaine autorisé
+    origin: "http://localhost:5173", // Domaine autorisé
     credentials: true, // Permettre l'envoi des cookies
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 app.use(bodyParser.json({ limit: '10mb' })); // Par exemple, 50mb
 app.use(cookieParser());
