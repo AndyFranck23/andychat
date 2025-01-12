@@ -27,7 +27,7 @@ export const Login = () => {
             try {
                 let response = await axios.post(`${NOM_DE_DOMAIN}/login`, { form }, { withCredentials: true }) // Inclure les cookies
                 const { user } = response.data
-                if (user.autorisation === 1) {
+                if (user.autorisation === 1 || user.admin == true) {
                     localStorage.setItem('userData', JSON.stringify(user)); // Sauvegarder l'utilisateur
                     navigate("/admin"); // Redirection vers la page admin
                 } else {
