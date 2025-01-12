@@ -9,7 +9,7 @@ import ProtectedRoute from './admin/components/ProtectedRoute'
 import axios from 'axios'
 
 
-export const NOM_DE_DOMAIN = import.meta.env.VITE_API_URL
+export const NOM_DE_DOMAIN = 'https://andychat2.onrender.com'
 
 function App() {
   const [loading, setLoading] = useState(true)
