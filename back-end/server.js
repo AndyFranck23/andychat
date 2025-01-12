@@ -84,7 +84,7 @@ app.post('/login', (req, res) => {
             // Envoyer le token via un cookie
             res.cookie('authToken', token, {
                 httpOnly: true,
-                secure: true,
+                secure: false,
                 sameSite: 'strict',
                 maxAge: 3600 * 1000 * out, // 1 heure
             });
