@@ -1,26 +1,38 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link, useParams } from 'react-router-dom';
 
 export const Offre = ({ data, navigation }) => {
+    const { title } = useParams()
+    const { type } = useParams()
+    const path = title
+
+    if (data.length == 0) {
+        return <div className="h-screen w-full flex justify-center items-center">Loading...</div>
+    }
     return (
-        <div className="flex justify-center w-full">
-            <div className='flex flex-wrap justify-center'>
-                {data.map((item, index) =>
-                    <Chatbot key={index} data={item} navigation={navigation} />
-                )}
+        <>
+            <div className="flex justify-center w-full">
+                <div className="">
+                    {path ? <h1 className='text-gray-600 text-3xl text-center font-bold my-10 '>{type + ': ' + path} </h1> : <h1 className='text-gray-600 text-3xl text-center font-bold my-10 '>Acceuil </h1>}
+                    <div className='flex flex-wrap justify-around mx-5'>
+                        {data.map((item, index) =>
+                            <Chatbot key={index} data={item} navigation={navigation} />
+                        )}
+                    </div>
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 
-export const Chatbot = ({ data, navigation }) => {
+export const Chatbot = ({ data, navigation, className }) => {
     const navigate = useNavigate()
     return (
         <>
-            <div className="hover:bg-gray-300 bg-white shadow-lg rounded-xl my-3 mx-5 w-full sm:w-[350px]">
+            <div className={`hover:bg-gray-300 bg-white/20 blakdrop-opacity-20 shadow-lg my-3 w-full sm:w-[350px] ${className}`}>
                 <div className="z-40">
                     <div onClick={() => navigate(`/selectionOD/${data.title}`, { state: data })} className="flex items-center px-3 pt-3 ">
-                        <img src={data.image} className='mr-5 w-[65px] h-[65px] rounded-xl' />
+                        <img src={data.image} className='mr-5 w-[65px] h-[65px]' />
                         <div className="space-y-2">
                             <h1 className='text-2xl text-black font-bold'>{data.title} </h1>
                             <p className='font-medium sm:text-md text-sm border-gray-200 border-2 px-2 sm:py-1 py-0 rounded-[50px]'>Screen recording</p>
@@ -34,7 +46,7 @@ export const Chatbot = ({ data, navigation }) => {
                         }
                     </div>
                 </div>
-                <div className="bg-gray-200 px-5 py-1 text-xs sm:text-sm rounded-b-md ">
+                <div className="bg-gray-200 px-5 py-1 text-xs sm:text-sm ">
                     <p className=''>From $16</p>
                 </div>
             </div>
@@ -148,4 +160,3 @@ export const Pagination = ({ data = [], navigation }) => {
         </div>
     );
 };
-

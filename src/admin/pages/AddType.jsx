@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { MyInput } from '../SignUp'
 import axios from 'axios'
+import { NOM_DE_DOMAIN } from '../../App'
 
 const AddType = () => {
     const [message, setMessage] = useState('')
@@ -12,7 +13,7 @@ const AddType = () => {
     const submit = async () => {
         if (form.title !== '') {
             try {
-                const response = await axios.post('http://localhost:5000/addType', { form })
+                const response = await axios.post(`${NOM_DE_DOMAIN}/addType`, { form })
                 setMessage(response.data.message)
                 console.log(response.data)
             } catch (e) {

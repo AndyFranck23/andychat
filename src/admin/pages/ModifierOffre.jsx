@@ -3,6 +3,7 @@ import { MyInput } from "../SignUp"
 import axios from "axios"
 import { useParams } from "react-router-dom"
 import { listClassement, listType } from "../components/api"
+import { NOM_DE_DOMAIN } from "../../App"
 
 export default function ModifierOffre() {
     const { id } = useParams()
@@ -32,7 +33,7 @@ export default function ModifierOffre() {
 
     const offre = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/offreSelect/${id}`)
+            const response = await axios.get(`${NOM_DE_DOMAIN}/offreSelect/${id}`)
             const { offre } = response.data
 
             let description = ''
@@ -72,7 +73,7 @@ export default function ModifierOffre() {
     const submit = async () => {
         if ((form.title && form.classement && form.descriptionOC && form.image && form.lien) !== '') {
             try {
-                const response = await axios.post(`http://localhost:5000/offreUpdate/${id}`, { form })
+                const response = await axios.post(`${NOM_DE_DOMAIN}/offreUpdate/${id}`, { form })
                 // console.log(response.data.message)
                 setMessage(response.data.message)
             } catch (err) {

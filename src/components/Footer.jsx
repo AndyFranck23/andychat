@@ -1,6 +1,6 @@
 export function Footer({ data }) {
     return (
-        <footer className="mt-20">
+        <footer className="">
             <div className=" grid grid-cols-1 md:grid-cols-4 gap-4  bg-footer p-5 text-[15px] sm:text-[18px] ">
                 <div className="...">
                     <h1 className="text-white pb-[30px] font-bold">TRUCS & ASTUCES DE VOYAGE</h1>

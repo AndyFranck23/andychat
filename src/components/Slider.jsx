@@ -1,7 +1,11 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { NOM_DE_DOMAIN } from '../App';
 
-const Slider = ({ className, types }) => {
+const Slider = ({ className }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [types, setTypes] = useState([]);
+
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -9,8 +13,19 @@ const Slider = ({ className, types }) => {
                 slide === types.length - 1 ? 0 : slide + 1
             );
         }, 3000);
+        type()
         return () => clearInterval(interval);
     }, [types.length]);
+
+    const type = async () => {
+        try {
+            const response = await axios.get(`${NOM_DE_DOMAIN}/allType`);
+            const { types } = response.data;
+            setTypes(types);
+        } catch (e) {
+            console.log(e.response.data + e)
+        }
+    }
 
     const nextSlide = () => {
         setCurrentIndex((prevIndex) =>

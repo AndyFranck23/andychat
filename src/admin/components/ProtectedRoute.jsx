@@ -15,7 +15,8 @@ const ProtectedRoute = ({ children }) => {
                 setIsAuthenticated(true);
             } catch (error) {
                 // if (error.response && error.response.status === 401) {
-                navigate('/login', { state: error.response.data.message }); // Redirige l'utilisateur vers la page de connexion
+                console.error("Erreur d'authentification :", error);
+                navigate('/login', { state: error.response?.data?.message || "Erreur inconnue" }); // Redirige l'utilisateur vers la page de connexion
                 // }
             } finally {
                 setLoading(false);

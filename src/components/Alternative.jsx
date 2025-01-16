@@ -1,35 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Chatbot } from './Offre'
+import { useLocation } from 'react-router-dom';
 
-const Alternative = ({ alternative, classement, navigation }) => {
-    const [data, setData] = useState([])
+const Alternative = ({ alternative, navigation }) => {
+    const location = useLocation()
+    const url = location.pathname
+    const lastUrl = url.split("/").pop()
 
-    useEffect(() => {
-        if (!alternative || alternative.length === 0) return;
-        const path = location.pathname
-        const slug = path.split('/').pop(); // récupération du dernier url
-        // filtrer les données par rapport à l'url
-        // console.log(alternative)
-
-        let tab = []
-        alternative.map(elt => {
-            let test = false
-            elt.classement.map(elt => {
-                elt == slug ? test = true : ''
-            })
-            !test ? tab.push(elt) : ''
-        })
-        setData(tab)
-    }, [])
+    const filteredData = alternative
+        .filter(item => !item.classement.includes(lastUrl)) // Exclure les éléments qui contiennent `lastUrl` dans le classement
+        .slice(0, 10); // Limiter à 10 éléments
 
     return (
-        <div className="flex justify-center w-full mt-20">
-            <div className='flex flex-wrap justify-center'>
-                {data.map((item, index) =>
-                    <Chatbot key={index} data={item} navigation={navigation} />
-                )}
-            </div>
-        </div>
+        <>
+            {lastUrl &&
+                <div className=" mt-10">
+                    <h1 className='text-3xl text-gray-600 font-bold my-5 flex justify-center items-center'>Autres</h1>
+                    <div className="flex justify-center w-full">
+                        <div className='flex flex-wrap justify-around mx-5'>
+                            {filteredData.map((item, index) =>
+                                <Chatbot key={index} data={item} navigation={navigation} />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            }
+        </>
     )
 }
 

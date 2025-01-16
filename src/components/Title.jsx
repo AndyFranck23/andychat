@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Title = () => {
+const Title = ({ id }) => {
     return (
         <div className='mt-20 space-y-10 px-5'>
             <div className="flex justify-around">
@@ -15,7 +15,7 @@ const Title = () => {
                 <p className='w-[600px] text-xl'>Generating content fast is cool but generating original content fast is cooler.</p>
             </div>
             <div className="flex justify-around text-center md:text-xl text-md">
-                <div className="w-[500px] flex justify-around">
+                <div id={id} className="w-[500px] flex justify-around">
                     <button className='md:p-3 p-2 border-black border-[1px] rounded-lg'>Start with Google</button>
                     <button className='md:p-3 p-2 border-none bg-blue-700 rounded-lg text-white font-sans'>Start with Email</button>
                 </div>

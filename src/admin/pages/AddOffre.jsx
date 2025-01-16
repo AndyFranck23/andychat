@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { MyInput } from "../SignUp"
 import axios from "axios"
 import { listClassement, listType } from "../components/api"
+import { NOM_DE_DOMAIN } from "../../App"
 
 export default function AddOffre() {
     const [descCourt, setDescCourt] = useState('')
@@ -63,7 +64,7 @@ export default function AddOffre() {
                 setMessage("Veuillez remplir le OD")
             } else {
                 try {
-                    const response = await axios.post('http://localhost:5000/addOffre', { form })
+                    const response = await axios.post(`${NOM_DE_DOMAIN}/addOffre`, { form })
                     setMessage(response.data.message)
                     console.log(response.data.message)
                 } catch (e) {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { MyInput } from '../SignUp'
 import AddType from './AddType'
 import axios from 'axios'
+import { NOM_DE_DOMAIN } from '../../App'
 
 const AddClassement = ({ userdata }) => {
     const [message, setMessage] = useState('')
@@ -23,7 +24,7 @@ const AddClassement = ({ userdata }) => {
 
     const listType = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/allType")
+            const response = await axios.get(`${NOM_DE_DOMAIN}/allType`)
             const { types } = response.data
             // setMessage(response.data.message)
             setTypes(types)
@@ -35,7 +36,7 @@ const AddClassement = ({ userdata }) => {
     const submit = async () => {
         if ((form.title && form.type) !== '') {
             try {
-                const response = await axios.post('http://localhost:5000/addClassement', { form })
+                const response = await axios.post(`${NOM_DE_DOMAIN}/addClassement`, { form })
                 setMessage(response.data.message)
                 console.log(response.data)
             } catch (e) {

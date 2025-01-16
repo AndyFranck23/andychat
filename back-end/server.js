@@ -6,9 +6,13 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
+import multer from "multer";
 
 const app = express();
 
+// Configuration de Multer pour gérer les fichiers
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // Charger le fichier `.env`
 dotenv.config();
@@ -18,10 +22,12 @@ const NOM_DE_DOMAIN = process.env.VITE_API_URL
 
 app.use(express.json())
 app.use(cors({
-    origin: "https://andychat23.netlify.app/", // Domaine autorisé
+    origin: "https://andychat23.netlify.app", // Domaine autorisé
     credentials: true, // Permettre l'envoi des cookies
 }));
 app.use(bodyParser.json({ limit: '10mb' })); // Par exemple, 50mb
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(cookieParser());
 
 
@@ -84,8 +90,8 @@ app.post('/login', (req, res) => {
             // Envoyer le token via un cookie
             res.cookie('authToken', token, {
                 httpOnly: true,
-                secure: true,
-                sameSite: 'strict',
+                secure: process.env.NODE_ENV === 'production', // true en production
+                sameSite: 'none', // Permet l'utilisation cross-site
                 maxAge: 3600 * 1000 * out, // 1 heure
             });
 
@@ -425,6 +431,112 @@ app.post('/typeUpdate/:id', (req, res) => {
         }
     })
 })
+
+// RECUPERER TOUS LES ARTICLES
+app.get('/articles', (req, res) => {
+    const query = 'SELECT * FROM articles';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: 'Erreur lors de la récupération des articles.' });
+        }
+
+        // Traiter les résultats pour envoyer l'image correctement
+        const articles = results.map(article => {
+            if (article.image_url) {
+                // Si l'image est une URL, on la renvoie telle quelle
+                article.image = article.image_url;
+            } else if (article.image_data) {
+                // Si l'image est un BLOB, on la transforme en base64
+                article.image = `data:image/jpeg;base64,${article.image_data.toString('base64')}`;
+            } else {
+                article.image = null;
+            }
+            console.log(article.image)
+            return article;
+        });
+
+        res.json(articles);
+    });
+});
+
+
+// RECUPERER UN ARTICLES PAR SON ID
+app.get('/articles/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'SELECT * FROM articles WHERE id = ?';
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: 'Erreur lors de la récupération des articles.' });
+        }
+        // Traiter les résultats pour envoyer l'image correctement
+        const articles = result.map(article => {
+            if (article.image_url) {
+                // Si l'image est une URL, on la renvoie telle quelle
+                article.image = article.image_url;
+            } else if (article.image_data) {
+                // Si l'image est un BLOB, on la transforme en base64
+                article.image = `data:image/jpeg;base64,${article.image_data.toString('base64')}`;
+            } else {
+                article.image = null;
+            }
+            console.log(article.image)
+            return article;
+        });
+
+        res.json(articles);
+    })
+});
+
+// AJOUTER UN ARTICLE
+app.post('/addArticles', upload.single('image'), (req, res) => {
+    const { title, description, content, date, imageUrl } = req.body;
+    const image = req.file ? req.file.buffer : null;
+
+    const query = `
+        INSERT INTO articles (title, description, content, image_url, image_data, date)
+        VALUES (?, ?, ?, ?, ?, ?)
+    `;
+
+    db.query(query, [title, description, content, imageUrl || null, image, date], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'article' });
+        }
+        return res.status(230).json({ message: 'Article ajouté avec succès' });
+    });
+});
+
+
+// MODIFIER UN ARTICLE
+app.post('/modifierArticles/:id', upload.single('image'), (req, res) => {
+    const { id } = req.params;
+    const { title, description, content, date, imageUrl } = req.body;
+    const image = req.file ? req.file.buffer : null;
+    const query = 'UPDATE articles SET title=?, description=?, content=?, image_url=?, image_data=?, date=? WHERE id=?';
+    db.query(query, [title, description, content, imageUrl || null, image, date, id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(517).json({ message: 'Erreur lors de l\'ajout de l\'article' });
+        }
+        return res.status(230).json({ message: 'Article modifier avec succès' });
+    });
+});
+
+// SUPPRIMER UN ARTICLE
+app.delete('/articles/:id', (req, res) => {
+    const { id } = req.params;
+    const query = 'DELETE FROM articles WHERE id = ?';
+    db.query(query, [id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Article not found' });
+        }
+        res.json({ message: 'Article deleted successfully' });
+    });
+});
 
 app.listen(PORT, () => {
     console.log(`Serveur démarré sur le port ${PORT}`);

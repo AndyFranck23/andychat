@@ -1,50 +1,78 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { Chatbot } from '../components/Offre'
 
-export const CategorieOD = () => {
+export const CategorieOD = ({ alternative, navigation }) => {
     const location = useLocation()
     const data = location.state
+    const filters = data.classement
+    useEffect(() => {
+        // Remettre le scroll en haut de la page lors du rendu initial
+        // window.scrollTo(0, 0);
+        scrollToSection('head')
+    }, [navigation]);
+
+
+    const filterData = (data, terms) => {
+        const matchingItems = data.filter((item) =>
+            item.classement.some((term) => terms.includes(term)) // Vérifie si un terme correspond
+        );
+        return matchingItems.slice(0, 10); // Limite à 10 résultats
+    };
+
+    const filteredData = filterData(alternative, filters);
 
     return (
-        <div className="w-full sm:flex block mt-5 bg-gray-90">
-            <div className="border-r-2 border-white p-5">
-                <div className=" border-b-2 border-white">
-                    <div className="w-full">
-                        <div className="flex items-center px-3 pt-3 ">
-                            <img src={data.image} className='mr-2 w-[65px] h-[65px] rounded-xl' />
-                            <div className="">
-                                <h1 className='text-2xl text-black font-bold m-2'>{data.title} </h1>
-                                <p className='font-medium sm:text-md text-sm border-gray-100 border-2 px-2 sm:py-1 py-0 rounded-[50px] m-2'>Screen recording</p>
+        <>
+            <div id='head' className=""></div>
+            <div className=""></div>
+            <div className=""></div>
+            <div className="w-full md:flex block mt-5 bg-gray-90">
+                <div className="border-r-2 border-white p-5">
+                    <div className=" border-b-2 border-white">
+                        <div className="w-full">
+                            <div className="flex items-center px-3 pt-3 ">
+                                <img src={data.image} className='mr-2 w-[65px] h-[65px] rounded-xl' />
+                                <div className="">
+                                    <h1 className='text-2xl text-black font-bold m-2'>{data.title} </h1>
+                                    <p className='font-medium sm:text-md text-sm border-gray-100 border-2 px-2 sm:py-1 py-0 rounded-[50px] m-2'>Screen recording</p>
+                                </div>
+                            </div>
+                            <div className="px-3 py-1 flex flex-wrap text-white text-md font-medium lg:text-lg space-x-1 space-y-1">
+                                <a href='https://andyfranckportfolio.netlify.app/' className='bg-white px-5 py-2 rounded-lg text-black m-2'>Voir le prestataire</a>
                             </div>
                         </div>
-                        <div className="px-3 py-1 flex flex-wrap text-white text-md font-medium lg:text-lg space-x-1 space-y-1">
-                            <button className='bg-white px-5 py-2 rounded-lg text-black m-2'>Use tool</button>
-                        </div>
+                    </div>
+
+                    <div className=' pt-4'>
+                        <img src="IMG1.jpg" alt="" />
+                    </div>
+                    <Caracteristiques data={data} navigation={navigation} />
+                    <Description />
+                    <div className='p-5'>
+                        <button className='bg-neutral-900 rounded-lg text-white py-3 m-1 w-full hover:bg-gray-700'>Use tools</button>
+                        <button className='bg-gray-200 rounded-lg text-black py-3 m-1 w-full'>Save</button>
+                        <button className='bg-cyan-500 rounded-lg text-white py-3 m-1 w-full'> Vote Best AI Tool of 2024</button>
                     </div>
                 </div>
 
-                <div className=' pt-4'>
-                    <img src="IMG1.jpg" alt="" />
-                </div>
-                <Caracteristiques data={data} />
-                <Description />
-                <div className='p-5'>
-                    <button className='bg-neutral-900 rounded-lg text-white py-3 m-1 w-full hover:bg-gray-700'>Use tools</button>
-                    <button className='bg-gray-200 rounded-lg text-black py-3 m-1 w-full'>Save</button>
-                    <button className='bg-cyan-500 rounded-lg text-white py-3 m-1 w-full'> Vote Best AI Tool of 2024</button>
+                <div className="w-full">
+                    <h1 id='alternative' className='text-gray-600 text-3xl text-center font-bold my-5'>Alternative</h1>
+                    <div className="mx-5">
+                        {filteredData.map((item, index) =>
+                            <Chatbot key={index} data={item} navigation={navigation} />
+                        )}
+                    </div>
                 </div>
             </div>
-
-            <div className="sm:w-[300px] w-full">
-                ofrre court
-            </div>
-        </div>
+        </>
     )
 }
 
 
 
-const Caracteristiques = ({ data }) => {
+const Caracteristiques = ({ data, navigation }) => {
+
     return (
         <div className='rounded-lg p-5 bg-white mt-8  '>
 
@@ -60,14 +88,14 @@ const Caracteristiques = ({ data }) => {
             <div className='flex flex-wrap m-3'>
                 {
                     data.classement.map((item, index) =>
-                        <button key={index} className='border-[30] bg-gray-100 rounded-lg text-black px-3 py-1 m-1 text-xs sm:text-sm'>{item} </button>
+                        <button onClick={() => navigation(item)} key={index} className='border-[30] bg-gray-100 rounded-lg text-black px-3 py-1 m-1 text-xs sm:text-sm'>{item} </button>
                     )
                 }
                 <p className=' p-1'>from $13,5/mo</p>
             </div>
             <p className='p-4 text-[15px]'>Most popular alternative:  <span className='font-bold'> MetaVoice Studio  </span> (321 saves)</p>
             <div className=''>
-                <button className='flex bg-gray-100 rounded-lg  px-3 py-2 m-2 text-[15px] w-full'> View all 9alternatives</button>
+                <button onClick={() => scrollToSection("alternative")} className='flex bg-gray-100 rounded-lg  px-3 py-2 m-2 text-[15px] w-full'> View all 9alternatives</button>
                 <button className='flex bg-gray-100 rounded-lg px-3 py-2 m-2 text-[15px] w-full'> recommendation </button>
             </div>
 
@@ -88,10 +116,18 @@ const Description = () => {
                     <p className='font-bold text-black '>Message</p>
                 </div>
             </div>
-            <div className=''>
-
+            <div className='py-2'>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur, aliquid id odio consequatur impedit sit voluptas labore corporis corrupti distinctio natus cum libero dignissimos totam unde molestias officiis! Ducimus, ex.</p>
             </div>
 
         </div>
     )
 }
+
+// Fonction pour défiler vers une section
+export const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+    }
+};

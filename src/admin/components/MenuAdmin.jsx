@@ -7,7 +7,7 @@ export const MenuAdmin = ({ className, userType, role }) => {
     const [isActiveOffre, setIsActiveOffre] = useState(false)
     const [isActiveClassement, setIsActiveClassement] = useState(false)
     const [isActiveCompte, setIsActiveCompte] = useState(false)
-    const [isActiveSousClassement, setIsActiveSousClassement] = useState(false)
+    const [isActiveBlog, setIsActiveBlog] = useState(false)
 
     const toggleOffre = () => {
         setIsActiveClassement(false)
@@ -18,19 +18,23 @@ export const MenuAdmin = ({ className, userType, role }) => {
     const toggleClassement = () => {
         setIsActiveOffre(false)
         setIsActiveCompte(false)
+        setIsActiveBlog(false)
         setIsActiveClassement(!isActiveClassement)
     }
 
-    // const toggleSousClassement = () => {
-    //     navigate('/admin/Classement')
-    //     setIsActiveOffre(false)
-    //     setIsActiveClassement(!isActiveClassement)
-    // }
 
     const toggleCompte = () => {
         setIsActiveOffre(false)
         setIsActiveClassement(false)
+        setIsActiveBlog(false)
         setIsActiveCompte(!isActiveCompte)
+    }
+
+    const toggleBlog = () => {
+        setIsActiveOffre(false)
+        setIsActiveClassement(false)
+        setIsActiveOffre(false)
+        setIsActiveBlog(!isActiveBlog)
     }
 
     return (
@@ -72,18 +76,18 @@ export const MenuAdmin = ({ className, userType, role }) => {
                             text={'Ajouter un classement'} />
                     </div>
                 </li>
-                {/* <li>
-                    <MyButton text={'Sous-classement'} icon={'fa-regular fa-user'} onClick={toggleSousClassement} className={`${isActiveSousClassement ? 'bg-blue-500 text-white hover:text-white' : ''}`} />
-                    <div className={`bg-gray-700 text-gray-300 ${isActiveSousClassement ? 'block' : 'hidden'}`}>
+                <li>
+                    <MyButton text={'Blog'} icon={'fa-regular fa-user'} onClick={toggleBlog} className={`space-x-3 ${isActiveBlog ? 'bg-blue-500 text-white hover:text-white' : ''}`} />
+                    <div className={`bg-gray-700 text-gray-300 ${isActiveBlog ? 'block' : 'hidden'}`}>
                         <MyButton onClick={() => {
-                            navigate('/admin/ajoutSousClassement')
+                            navigate('/admin/ajoutBlog')
                         }}
-                            text={'Ajouter un classement'} />
-                        <MyButton text={'Tous les Sous-classement'} onClick={() => {
-                            navigate('/admin/ToutSousClassement')
+                            text={'Ajouter un article'} />
+                        <MyButton text={'Tous les articles'} onClick={() => {
+                            navigate('/admin/ToutBlog')
                         }} />
                     </div>
-                </li> */}
+                </li>
             </ul>
         </div>
     )

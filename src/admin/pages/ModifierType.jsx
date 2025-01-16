@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { MyInput } from '../SignUp'
 import axios from 'axios'
+import { NOM_DE_DOMAIN } from '../../App'
 
 const ModifierType = () => {
     const { id } = useParams()
@@ -17,7 +18,7 @@ const ModifierType = () => {
 
     const handleType = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/typeSelect/${id}`)
+            const response = await axios.get(`${NOM_DE_DOMAIN}/typeSelect/${id}`)
             const { type } = response.data
             setForm({ title: type[0].title, image: type[0].image })
         } catch (e) {
@@ -28,7 +29,7 @@ const ModifierType = () => {
     const submit = async () => {
         if (form.title !== '') {
             try {
-                const response = await axios.post(`http://localhost:5000/typeUpdate/${id}`, { form })
+                const response = await axios.post(`${NOM_DE_DOMAIN}/typeUpdate/${id}`, { form })
                 setMessage(response.data.message)
                 console.log(response.data)
             } catch (e) {

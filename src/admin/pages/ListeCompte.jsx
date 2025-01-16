@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { NOM_DE_DOMAIN } from '../../App'
 
 export const ListeCompte = () => {
     const [data, setData] = useState([])
@@ -7,7 +8,7 @@ export const ListeCompte = () => {
     useEffect(() => {
         const test = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/compte")
+                const response = await axios.get(`${NOM_DE_DOMAIN}/compte`)
                 const { users } = response.data
                 // console.log(users)
                 setData(users)
@@ -21,7 +22,7 @@ export const ListeCompte = () => {
 
     const deleteCompte = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/compte/${id}`)
+            await axios.delete(`${NOM_DE_DOMAIN}/compte/${id}`)
             setData(data.filter((data) => data.id != id))
         } catch (err) {
             console.log(err.message)
